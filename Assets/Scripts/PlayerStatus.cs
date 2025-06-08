@@ -1,6 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum StatType
+  {
+      Passion,
+      Efficiency,
+      Health,
+      Social
+  }
 
 public class PlayerStatus : MonoBehaviour
 {
@@ -24,7 +31,29 @@ public class PlayerStatus : MonoBehaviour
 
     public void ItemAddStat()
     {
+        
+    }
 
+    public int GetBaseStat(StatType type)
+    {
+        return type switch
+        {
+            StatType.Passion => basePassion,
+            StatType.Efficiency => baseEfficiency,
+            StatType.Health => baseHealth,
+            StatType.Social => baseSocial,
+            _ => 0
+        };
+    }
+
+    public int GetBonusStat(StatType type)
+    {
+        return ItemAddStat(type.ToString());
+    }
+
+    public int GetTotalStat(StatType type)
+    {
+        return GetBaseStat(type) + GetBonusStat(type);
     }
 
 }
