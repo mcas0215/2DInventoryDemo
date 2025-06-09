@@ -21,9 +21,16 @@ public class PlayerInventory : MonoBehaviour
     private void CreateSlot(ItemData item)
     {
         GameObject slotGO = Instantiate(slotPrefab, contentParent);
+        slotGO.transform.localScale = Vector3.one;
+
         ItemSlot slot = slotGO.GetComponent<ItemSlot>();
+
+        slot.uiInventory = FindObjectOfType<UIInventory>();
+        slot.playerStatus = FindObjectOfType<PlayerStatus>();
+
         slot.Setup(item);
     }
+
     public void RefreshInventory()
     {
         // 기존 슬롯 모두 제거
@@ -38,4 +45,15 @@ public class PlayerInventory : MonoBehaviour
             CreateSlot(item);
         }
     }
+    [Header("초기 아이템")]
+    public ItemData[] startingItems;
+
+    private void Start()
+    {
+        foreach (var item in startingItems)
+        {
+            AddItem(item);
+        }
+    }
+
 }

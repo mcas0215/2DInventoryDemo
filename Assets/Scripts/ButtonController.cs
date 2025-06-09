@@ -18,7 +18,7 @@ public class ButtonController : MonoBehaviour
     public GameObject inventoryPanel;
     public PlayerInventory inventory;
     public UIInventory uiInventory;
-
+    public PlayerStatus playerStatus;
     public float slideDistance = 1200f;
     public float slideDuration = 1f;
 
@@ -59,14 +59,10 @@ public class ButtonController : MonoBehaviour
     public void OnInventoryButton()
     {
         StartCoroutine(ButtonAction(UIMainMenu, new Vector2(1000f, 0), UIInventory, new Vector2(slideDistance, 0), slideDuration));
-        bool willOpen = !inventoryPanel.activeSelf;
-        inventoryPanel.SetActive(willOpen);
-
-        if (willOpen)
-        {
-            inventory.RefreshInventory();         // 슬롯 다시 생성
-            uiInventory.ShowTooltip(null);        // 설명창 초기화
-        }
+        
+        inventory.RefreshInventory();         // 슬롯 다시 생성
+        uiInventory.ShowItem(null);        // 설명창 초기화
+        
     }
     public void OnCancelButton()
     {
@@ -79,4 +75,14 @@ public class ButtonController : MonoBehaviour
             StartCoroutine(ButtonAction(UIInventory, new Vector2(slideDistance, 0), UIMainMenu, new Vector2(slideDistance, 0), slideDuration));
         }
     }
+    public void OnClickEquipButton(ItemSlot slot)
+    {
+        if (playerStatus.IsEquipped(slot.currentItem))
+            playerStatus.UnequipItem(slot.currentItem);
+        else
+            playerStatus.EquipItem(slot.currentItem);
+
+        slot.UpdateEquipVisual(); // 테두리 갱신
+    }
+
 }

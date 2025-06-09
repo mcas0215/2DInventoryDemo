@@ -32,15 +32,21 @@ public class PlayerStatus : MonoBehaviour
     public int ItemAddStat(StatType stat)
     {
         int total = 0;
+
         foreach (var item in equippedItems)
         {
-            if (item.bonusStats.TryGetValue(stat, out int bonus))
+            foreach (var bonus in item.bonusStats)
             {
-                total += bonus;
+                if (bonus.stat == stat)
+                {
+                    total += bonus.amount;
+                }
             }
         }
+
         return total;
     }
+
 
     public int GetBaseStat(StatType type)
     {
@@ -57,5 +63,28 @@ public class PlayerStatus : MonoBehaviour
     public int GetBonusStat(StatType stat) => ItemAddStat(stat);
 
     public int GetTotalStat(StatType stat) => GetBaseStat(stat) + GetBonusStat(stat);
+
+    public List<ItemData> equippedItems = new List<ItemData>();
+
+    public void EquipItem(ItemData item)
+    {
+        if (!equippedItems.Contains(item))
+        {
+            equippedItems.Add(item);
+        }
+    }
+
+    public void UnequipItem(ItemData item)
+    {
+        if (equippedItems.Contains(item))
+        {
+            equippedItems.Remove(item);
+        }
+    }
+
+    public bool IsEquipped(ItemData item)
+    {
+        return equippedItems.Contains(item);
+    }
 
 }

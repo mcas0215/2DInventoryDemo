@@ -6,23 +6,43 @@ public class ItemSlot : MonoBehaviour
 {
     [Header("UI 요소")]
     public Image iconImage;
-    public TMP_Text nameText;
+    public Image borderImage; // 착용 상태 테두리용
+
+    [HideInInspector]
+    public ItemData currentItem;
+
     public UIInventory uiInventory;
-    private ItemData currentItem;
+    public PlayerStatus playerStatus;
 
     // 아이템 정보 설정
     public void Setup(ItemData item)
     {
         currentItem = item;
+        Debug.Log($"[ItemSlot] 설정됨: {item.displayName}, Icon: {(item.Icon != null ? "OK" : "null")}");
+
         iconImage.sprite = item.Icon;
-        nameText.text = item.displayName;
+
+        UpdateEquipVisual(); // 착용 여부 표시
     }
 
-    // 슬롯 클릭 시 호출할 함수
+    // 설명창 호출
     public void OnClickSlot()
     {
-        Debug.Log($"선택한 아이템: {currentItem.displayName}");
-        // 향후: 장비착용, 설명창 띄우기 등 연결 가능
-        uiInventory.ShowTooltip(currentItem);
+        uiInventory.ShowItem(currentItem);
     }
+
+    
+    public void UpdateEquipVisual()
+    {
+        if (playerStatus != null && playerStatus.IsEquipped(currentItem))
+        {
+            borderImage.enabled = true;
+            borderImage.color = Color.yellow;
+        }
+        else
+        {
+            borderImage.enabled = false; // 아예 꺼버리기!
+        }
+    }
+
 }
