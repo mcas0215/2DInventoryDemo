@@ -15,6 +15,10 @@ public class ButtonController : MonoBehaviour
     public RectTransform ButtonInventory;
     public RectTransform ButtonCancel;
 
+    public GameObject inventoryPanel;
+    public PlayerInventory inventory;
+    public UIInventory uiInventory;
+
     public float slideDistance = 1200f;
     public float slideDuration = 1f;
 
@@ -55,6 +59,14 @@ public class ButtonController : MonoBehaviour
     public void OnInventoryButton()
     {
         StartCoroutine(ButtonAction(UIMainMenu, new Vector2(1000f, 0), UIInventory, new Vector2(slideDistance, 0), slideDuration));
+        bool willOpen = !inventoryPanel.activeSelf;
+        inventoryPanel.SetActive(willOpen);
+
+        if (willOpen)
+        {
+            inventory.RefreshInventory();         // 슬롯 다시 생성
+            uiInventory.ShowTooltip(null);        // 설명창 초기화
+        }
     }
     public void OnCancelButton()
     {

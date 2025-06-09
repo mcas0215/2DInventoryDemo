@@ -24,14 +24,22 @@ public class PlayerStatus : MonoBehaviour
     public int baseHealth = 0;
     public int baseSocial = 0;
 
-    public int totalPassion => basePassion + ItemAddStat("Passion");
-    public int totalEfficiency => baseEfficiency + ItemAddStat("Efficiency");
-    public int totalHealth => baseHealth + ItemAddStat("Health");
-    public int totalSocial => baseSocial + ItemAddStat("Social");
+    public int totalPassion => basePassion + ItemAddStat(StatType.Passion);
+    public int totalEfficiency => baseEfficiency + ItemAddStat(StatType.Efficiency);
+    public int totalHealth => baseHealth + ItemAddStat(StatType.Health);
+    public int totalSocial => baseSocial + ItemAddStat(StatType.Social);
 
-    public void ItemAddStat()
+    public int ItemAddStat(StatType stat)
     {
-        
+        int total = 0;
+        foreach (var item in equippedItems)
+        {
+            if (item.bonusStats.TryGetValue(stat, out int bonus))
+            {
+                total += bonus;
+            }
+        }
+        return total;
     }
 
     public int GetBaseStat(StatType type)
@@ -46,14 +54,8 @@ public class PlayerStatus : MonoBehaviour
         };
     }
 
-    public int GetBonusStat(StatType type)
-    {
-        return ItemAddStat(type.ToString());
-    }
+    public int GetBonusStat(StatType stat) => ItemAddStat(stat);
 
-    public int GetTotalStat(StatType type)
-    {
-        return GetBaseStat(type) + GetBonusStat(type);
-    }
+    public int GetTotalStat(StatType stat) => GetBaseStat(stat) + GetBonusStat(stat);
 
 }
