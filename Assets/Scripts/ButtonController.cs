@@ -14,14 +14,14 @@ public class ButtonController : MonoBehaviour
     public RectTransform ButtonStatus;
     public RectTransform ButtonInventory;
     public RectTransform ButtonCancel;
-
+    public PlayerInventory playerInventory;
     public GameObject inventoryPanel;
     public PlayerInventory inventory;
     public UIInventory uiInventory;
     public PlayerStatus playerStatus;
     public float slideDistance = 1200f;
     public float slideDuration = 1f;
-
+    private ItemSlot selectedSlot;
 
     IEnumerator ButtonAction(RectTransform fromUI, Vector2 offsetFrom, RectTransform toUI, Vector2 offestTo, float duration)
     {
@@ -75,14 +75,24 @@ public class ButtonController : MonoBehaviour
             StartCoroutine(ButtonAction(UIInventory, new Vector2(slideDistance, 0), UIMainMenu, new Vector2(slideDistance, 0), slideDuration));
         }
     }
-    public void OnClickEquipButton(ItemSlot slot)
+    public void OnClickEquipButton()
     {
-        if (playerStatus.IsEquipped(slot.currentItem))
-            playerStatus.UnequipItem(slot.currentItem);
-        else
-            playerStatus.EquipItem(slot.currentItem);
+        if (selectedSlot == null) return;
 
-        slot.UpdateEquipVisual(); // 테두리 갱신
+        if (playerStatus.IsEquipped(selectedSlot.currentItem))
+            playerStatus.UnequipItem(selectedSlot.currentItem);
+        else
+            playerStatus.EquipItem(selectedSlot.currentItem);
+
+        selectedSlot.UpdateEquipVisual();
+        playerInventory.RefreshAllSlotVisuals();
+        uiInventory.ShowItem(selectedSlot.currentItem); // 설명창 갱신
+    }
+
+    public void SetSelectedSlot(ItemSlot slot)
+    {
+        Debug.Log($"슬롯 선택됨: {slot.currentItem.displayName}");
+        selectedSlot = slot;
     }
 
 }

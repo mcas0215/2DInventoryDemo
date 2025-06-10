@@ -9,7 +9,7 @@ public class PlayerInventory : MonoBehaviour
 
     [Header("아이템 목록")]
     public List<ItemData> items = new List<ItemData>();
-
+    public List<ItemSlot> allSlots = new List<ItemSlot>();
     // 아이템 추가
     public void AddItem(ItemData newItem)
     {
@@ -29,6 +29,8 @@ public class PlayerInventory : MonoBehaviour
         slot.playerStatus = FindObjectOfType<PlayerStatus>();
 
         slot.Setup(item);
+        allSlots.Add(slot);
+
     }
 
     public void RefreshInventory()
@@ -45,6 +47,15 @@ public class PlayerInventory : MonoBehaviour
             CreateSlot(item);
         }
     }
+    public void RefreshAllSlotVisuals()
+    {
+        foreach (var slot in allSlots)
+        {
+            slot.UpdateEquipVisual();
+        }
+    }
+
+
     [Header("초기 아이템")]
     public ItemData[] startingItems;
 

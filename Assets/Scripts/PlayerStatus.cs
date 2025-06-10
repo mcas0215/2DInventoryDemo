@@ -68,9 +68,17 @@ public class PlayerStatus : MonoBehaviour
 
     public void EquipItem(ItemData item)
     {
+        ItemData alreadyEquipped = equippedItems.Find(i => i.type == item.type);
+        if (alreadyEquipped != null)
+        {
+            equippedItems.Remove(alreadyEquipped);
+            Debug.Log($"ÀÚµ¿ ÇØÁ¦µÊ: {alreadyEquipped.displayName}");
+        }
+
         if (!equippedItems.Contains(item))
         {
             equippedItems.Add(item);
+            Debug.Log($"ÀåÂøµÊ: {item.displayName}");
         }
     }
 

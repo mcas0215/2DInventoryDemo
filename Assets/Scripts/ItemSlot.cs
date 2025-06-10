@@ -29,11 +29,13 @@ public class ItemSlot : MonoBehaviour
     public void OnClickSlot()
     {
         uiInventory.ShowItem(currentItem);
+        FindObjectOfType<ButtonController>().SetSelectedSlot(this);
     }
 
     
     public void UpdateEquipVisual()
     {
+        Debug.Log($"Å×µÎ¸® °»½Å: {currentItem?.displayName}, Âø¿ëµÊ? {playerStatus.IsEquipped(currentItem)}");
         if (playerStatus != null && playerStatus.IsEquipped(currentItem))
         {
             borderImage.enabled = true;
